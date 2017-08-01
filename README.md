@@ -55,7 +55,6 @@ Provides various signals. Depending on the length the training can last for ours
 
 #### MIDI
 
-Contains midi files and a corresponding numpy file of the right format for the model. A converter (python2) is provided by "midi_conf.py". 
-Example usage: 'python midi_conf.py <input (.mid or .np) path> <destination path>'
+Contains midi files and a corresponding numpy file of the right format for the model. A converter (python2) is provided by "midi_conf.py". This will take as input the filepath (.mid or .np) and the resulting destination path.
 
 The converter works for both directions. Be aware that midi often works with different tracks and this version only supports one track without prediction of the tone lenght.
