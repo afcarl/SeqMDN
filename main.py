@@ -13,22 +13,22 @@ from Neurocat import gen_layer, layerloop, gen_myst_layer
 from Neurocat import Preprocessing
 
 # horizont for time embedding
-pasHor = 100
+pasHor = 200
 futHor = 1
 infHor = futHor
 stride = 1
 
 # num of training epochs
-train_epoch = 15000 * futHor
+train_epoch = 2500 * futHor
 
 # batch
 batch = 1
 
 # noise factor for training
-noise_fac = 0.01
+noise_fac = 0.1
 
 # number of mixtures
-mixtures = 24
+mixtures = 3
 
 hidden = 4
 out_units = mixtures * futHor * 3
@@ -47,10 +47,10 @@ mlp = 3
 std_dev = 0.5
 
 # num of samples that should be generated
-gen_epoch = 500 * futHor
+gen_epoch = 1000 * futHor
 
 # choose the training data (zerocentered)
-data = np.float32(np.loadtxt("./midi/mario.np")[None, :])
+data = np.float32(np.loadtxt("./examples/sinus.txt")[None, :])
 print("data:\t\t", data.shape)
 # preprocess the data
 pp = Preprocessing(data.T)
@@ -152,6 +152,23 @@ with name_scp("loss"):
 with name_scp("trainer"):
     train_op = tf.train.AdamOptimizer().minimize(lossfunc)
 
+with name_scp("inference"):
+    # find random index by the probability of pi
+    with name_scp("random_pick"):
+        samples = tf.multinomial(tf.log(tf.transpose(pi[0])), 1)
+
+    # choose coresponding parameter for mixture
+    with name_scp("Pi"):
+        _pi = pi[0, :][tf.cast(samples[0][0], tf.int32)]
+    with name_scp("Mu"):
+        _mu = mu[0, :][tf.cast(samples[0][0], tf.int32)]
+    with name_scp("Sigma"):
+        _sig = sigma[0, :][tf.cast(samples[0][0], tf.int32)]
+
+    # alternatively you can just choose the argmax of pi (below numpy code)
+    # find argmax of pi such that you can choose optimal mu
+    # argmax = np.argmax(_pi, axis=1)[0]
+
 # train the model
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -203,24 +220,9 @@ with tf.Session() as sess:
 
     loader = Loading(gen_epoch + pasHor, 'Generating Autonomous Signal')
     while loader.in_progress(prediction.shape[1]):
-        _pi, _sig, _mu, _myst, _hier = sess.run(
-            [pi, sigma, mu, myst, hierarchie],
+        __pi, __sig, __mu, _myst, _hier = sess.run(
+            [_pi, _sig, _mu, myst, hierarchie],
             feed_dict={x: x_gen})
-
-        # find argmax of pi such that you can choose optimal mu
-        # argmax = np.argmax(_pi, axis=1)[0]
-
-        # find random pi by theire probability
-        result = np.random.rand(1)[:, None]  # initially random [0, 1]
-        rn = np.random.randn(1)[:, None]  # normal random matrix (0.0, 1.0)
-
-        pdf = np.cumsum(_pi, axis=1)
-        argmax = np.argmax(result <= pdf, axis=1)[0]
-
-        # choose coresponding parameter for mixture
-        __pi = np.choose(argmax, _pi[0])
-        __mu = np.choose(argmax, _mu[0])
-        __sig = np.choose(argmax, _sig[0])
 
         if np.any(np.isnan(__mu)):
             exit(7)
