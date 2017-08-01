@@ -19,7 +19,7 @@ infHor = futHor
 stride = 1
 
 # num of training epochs
-train_epoch = 2500 * futHor
+train_epoch = futHor * 2500
 
 # batch
 batch = 1
@@ -47,11 +47,14 @@ mlp = 3
 std_dev = 0.5
 
 # num of samples that should be generated
-gen_epoch = 1000 * futHor
+gen_epoch = futHor * 1000
 
-# choose the training data (zerocentered)
+# choose the training data
 data = np.float32(np.loadtxt("./examples/sinus.txt")[None, :])
+
+assert len(data.shape == 2) and data.shape[0] == 1 and data.shape[1] > 0
 print("data:\t\t", data.shape)
+
 # preprocess the data
 pp = Preprocessing(data.T)
 data = pp.encode(data.T).T
@@ -165,9 +168,9 @@ with name_scp("inference"):
     with name_scp("Sigma"):
         _sig = sigma[0, :][tf.cast(samples[0][0], tf.int32)]
 
-    # alternatively you can just choose the argmax of pi (below numpy code)
-    # find argmax of pi such that you can choose optimal mu
-    # argmax = np.argmax(_pi, axis=1)[0]
+        # alternatively you can just choose the argmax of pi (below numpy code)
+        # find argmax of pi such that you can choose optimal mu
+        # argmax = np.argmax(_pi, axis=1)[0]
 
 # train the model
 with tf.Session() as sess:
