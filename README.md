@@ -32,7 +32,7 @@ Classic. But filtered.
 
 ### Hidden Layer
 Similar to the input particular hidden layers also contain a filter of the output of the previous layer. These should give the network the focus and weights over the datastructure of the input to that layer.
-![graph](https://github.com/f37/MDN_music_MDP/blob/master/Architecture/graph.png)
+![hidden](https://github.com/f37/MDN_music_MDP/blob/master/Architecture/hidden.png)
 
 ### MLP and Output layer
 Classic.
@@ -41,7 +41,8 @@ Classic.
 Calculates the loss due to Bishop 1994.
 
 ### Inference
-Creates a random variable for a given input from the resulting mixture parameter.
+Creates a random variable for a given input from the resulting mixture parameter. In this project for convenience the inference chooses a mixture randomly by their occurance propability Pi and gives the corresponding Mu as output
+![hidden](https://github.com/f37/MDN_music_MDP/blob/master/Architecture/inference.png)
 
 ## Running
 
