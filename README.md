@@ -1,8 +1,8 @@
 #  Mixture Density Network for predicting sequences
 
-Given a sequence of data. The model creates a statistic over the next propable timestep depending on a given horizont of the past. This was the model tries to predict the next propable datapoint. This was enabled by a time embedding.
+Given a sequence of data. The model creates a statistic over the next propable timestep depending on a given horizont of the past. The model tries to predict the next propable datapoint.
 
-We are using a mixture density network (MDN, Bishop 1994) combined with a simple hierarchical structure analysis inside particular hidden layers.
+We are using a mixture density network (MDN, Bishop 1994) combined with a simple hierarchical structure analysis inside particular hidden layers. The trainingdata will be preprocessed and time embedded.
 
 ## Getting Started
 
@@ -46,5 +46,16 @@ Creates a random variable for a given input from the resulting mixture parameter
 
 ## Running
 
-### Example usage
+Example files are provided, but feel free to use your own. The model creates a statistic from the data i.e. a distribution depending on the input data. From that it autonomously generates next propable outputs. This way we can create sort of music (see below)
 
+### Exampledata folders
+#### Example
+
+Provides various signals. Depending on the length the training can last for ours. A toyexample is "sinus.txt" that can show you the proof of work of the algorthm.
+
+#### MIDI
+
+Contains midi files and a corresponding numpy file of the right format for the model. A converter (python2) is provided by "midi_conf.py". 
+Example usage: python midi_conf.py <input (.mid or .np) path> <destination path>.
+
+The converter works for both directions. Be aware that midi often works with different tracks and this version only supports one track without prediction of the tone lenght.
