@@ -198,13 +198,13 @@ def gen_myst_layer(input, shape, std_dev=0.5):
     half = shape[0] // 2
     with glab("h_hidden") as scope:
         inp = input
-        with glab("mystery") as scope:
-            shapes = [(shape[0], shape[0]),
-                      (shape[0], half),
-                      (half, shape[0]),
-                      (shape[0], shape[0])]
+        shapes = [(shape[0], shape[0]),
+                  (shape[0], half),
+                  (half, shape[0]),
+                  (shape[0], shape[0])]
+        with glab("filter") as scope:
             input = layerloop("mytery", input, shapes)
-            # TODO: Residual connection
+        # TODO: Residual connection
             filter = input
             input = tf.multiply(inp, input, name="conv")
         Wh, bh, out = gen_layer("hidden", input, (shape[0], shape[1]))

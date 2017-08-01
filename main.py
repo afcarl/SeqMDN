@@ -52,7 +52,7 @@ gen_epoch = futHor * 1000
 # choose the training data
 data = np.float32(np.loadtxt("./examples/sinus.txt")[None, :])
 
-assert len(data.shape == 2) and data.shape[0] == 1 and data.shape[1] > 0
+#assert len(data.shape == 2) and data.shape[0] == 1 and data.shape[1] > 0
 print("data:\t\t", data.shape)
 
 # preprocess the data
