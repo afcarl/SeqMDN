@@ -1,4 +1,4 @@
-#  Mixture Density Network for predicting sequences
+#  Sequence predictiong Mixture Density Network (MDN)
 
 Given a sequence of data. The model creates a statistic over the next propable timestep depending on a given horizont of the past. The model tries to predict the next propable datapoint.
 
